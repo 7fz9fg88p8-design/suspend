@@ -60,6 +60,19 @@ IsDouyinWindow(*) {
     return false
 }
 
+PauseDouyinLive(*) {
+    ; Avoid sending a plain Space from the Space hotkey: some Douyin live pages
+    ; keep keyboard focus on the page chrome/chat and ignore it. Media_Play_Pause
+    ; is handled by Chromium and the Douyin desktop player more consistently.
+    Send "{Media_Play_Pause}"
+
+    ; Give visible feedback so it is clear the scoped hotkey fired. This does
+    ; not guarantee Douyin accepted the media key, but it distinguishes hotkey
+    ; detection problems from player problems.
+    ToolTip "已发送播放/暂停按键"
+    SetTimer () => ToolTip(), -900
+}
+
 #HotIf IsDouyinWindow()
-Space::Send "{Space}"
+Space::PauseDouyinLive()
 #HotIf
